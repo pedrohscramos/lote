@@ -15,23 +15,19 @@
       <mat-option value="REJEITADO">Rejeitado</mat-option>
 
     </mat-select>
-    <div
-  *ngIf="erro"
-  class="erro">
-
-  {{ erro }}
-
-</div>
+    
   </mat-form-field>
 
-  <div *ngIf="loading" class="loading">
+  @if(loading){
     <mat-spinner></mat-spinner>
-  </div>
+  }
 
+  @if(!loading && lotes.length === 0){
+    <p>Nenhum lote encontrado.</p>
+  }
   <table
     mat-table
-    [dataSource]="lotes"
-    *ngIf="!loading">
+    [dataSource]="lotes">
 
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>ID</th>

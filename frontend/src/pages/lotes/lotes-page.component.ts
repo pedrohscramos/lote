@@ -58,7 +58,7 @@ export class LotesPageComponent implements OnInit {
     'dataCriacao'
   ];
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.buscarLotes();
   }
 
