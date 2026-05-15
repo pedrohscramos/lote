@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>
+  Atualizar Status
+</h2>
+
+<div mat-dialog-content>
+
+  <mat-form-field appearance="outline">
+
+    <mat-label>Status</mat-label>
+
+    <mat-select [(ngModel)]="status">
+
+      <mat-option value="PENDENTE">
+        Pendente
+      </mat-option>
+
+      <mat-option value="EXPORTADO">
+        Exportado
+      </mat-option>
+
+      <mat-option value="REJEITADO">
+        Rejeitado
+      </mat-option>
+
+    </mat-select>
+
+  </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-button mat-dialog-close>
+    Cancelar
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="salvar()">
+
+    Salvar
+
+  </button>
+
+</div>

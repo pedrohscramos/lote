@@ -1,0 +1,88 @@
+<div class="container">
+
+  <h1>Gerenciamento de Lotes</h1>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Status</mat-label>
+
+    <mat-select
+      [(ngModel)]="filtroStatus"
+      (selectionChange)="buscarLotes()">
+
+      <mat-option value="TODOS">Todos</mat-option>
+      <mat-option value="PENDENTE">Pendente</mat-option>
+      <mat-option value="EXPORTADO">Exportado</mat-option>
+      <mat-option value="REJEITADO">Rejeitado</mat-option>
+
+    </mat-select>
+    <div
+  *ngIf="erro"
+  class="erro">
+
+  {{ erro }}
+
+</div>
+  </mat-form-field>
+
+  <div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <table
+    mat-table
+    [dataSource]="lotes"
+    *ngIf="!loading">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let lote">
+        {{ lote.id }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="operador">
+      <th mat-header-cell *matHeaderCellDef>Operador</th>
+      <td mat-cell *matCellDef="let lote">
+        {{ lote.operador }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="processo">
+      <th mat-header-cell *matHeaderCellDef>Processo</th>
+      <td mat-cell *matCellDef="let lote">
+        {{ lote.processo }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let lote">
+
+        <app-status-badge
+          [status]="lote.status">
+        </app-status-badge>
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataCriacao">
+      <th mat-header-cell *matHeaderCellDef>Data</th>
+      <td mat-cell *matCellDef="let lote">
+        {{ lote.dataCriacao | date:'dd/MM/yyyy HH:mm' }}
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns">
+    </tr>
+
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="abrirModal(row)">
+    </tr>
+
+  </table>
+
+</div>
