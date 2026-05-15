@@ -84,5 +84,13 @@
     </tr>
 
   </table>
+  <mat-paginator
+  [length]="totalElements"
+  [pageSize]="size"
+  [pageIndex]="page"
+  [pageSizeOptions]="[5, 10, 20]"
+  (page)="alterarPagina($event)">
+
+</mat-paginator>
 
 </div>

@@ -2,6 +2,7 @@ package br.com.cavoxsolutions.backend.controller;
 
 import br.com.cavoxsolutions.backend.dto.AtualizarStatusDTO;
 import br.com.cavoxsolutions.backend.dto.LoteRequestDTO;
+import br.com.cavoxsolutions.backend.dto.PageResponseDTO;
 import br.com.cavoxsolutions.backend.entity.Lote;
 import br.com.cavoxsolutions.backend.enums.StatusLote;
 import br.com.cavoxsolutions.backend.service.LoteService;
@@ -24,7 +25,7 @@ public class LoteController {
     }
 
     @GetMapping
-    public Page<Lote> listar(
+    public PageResponseDTO<Lote> listar(
             @RequestParam(required = false) StatusLote status,
             @RequestParam(required = false) String operador,
             @RequestParam(defaultValue = "0") int page,
@@ -32,8 +33,15 @@ public class LoteController {
     ) {
 
         Pageable pageable = PageRequest.of(page, size);
+        Page<Lote> response = service.listar(status, operador, pageable);
 
-        return service.listar(status, operador, pageable);
+        return PageResponseDTO.<Lote>builder()
+                .content(response.getContent())
+                .totalElements(response.getTotalElements())
+                .totalPages(response.getTotalPages())
+                .page(page)
+                .size(size)
+                .build();
     }
 
     @PatchMapping("/{id}/status")

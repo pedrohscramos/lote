@@ -10,11 +10,17 @@ export class LoteService {
     private http = inject(HttpClient);
     private apiUrl = 'http://localhost:8080/api/lotes';
 
-    listar(status?: string): Observable<any>{
-        let params = new HttpParams();
+    listar(
+        status?: string,
+        page: number = 0,
+        size: number = 10): Observable<any>{
+        let params = new HttpParams()
+        .set('page', page)
+        .set('size', size);
         if(status && status !== 'TODOS'){
             params = params.set('status', status);
         }
+        
         return this.http.get<any>(this.apiUrl, { params });
     }
 

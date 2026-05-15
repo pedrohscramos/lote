@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 import { LoteService } from '../../core/services/lote.service';
 import { Lote } from '../../core/models/lote.model';
@@ -23,7 +24,8 @@ import { LoteModalComponent } from './lote-modal/lote-modal.component';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    StatusBadgeComponent
+    StatusBadgeComponent,
+    MatPaginatorModule
   ],
   templateUrl: './lotes-page.component.html',
   styleUrls: ['./lotes-page.component.scss']
@@ -42,6 +44,12 @@ export class LotesPageComponent implements OnInit {
 
   filtroStatus = 'TODOS';
 
+  page = 0;
+
+  size = 10;
+
+  totalElements = 0;
+
   displayedColumns = [
     'id',
     'operador',
@@ -58,10 +66,17 @@ export class LotesPageComponent implements OnInit {
 
     this.loading = true;
 
-    this.service.listar(this.filtroStatus)
+    this.erro = '';
+
+    this.service.listar(
+        this.filtroStatus,
+        this.page,
+        this.size
+      )
       .subscribe({
         next: response => {
           this.lotes = response.content;
+          this.totalElements = response.totalElements;
           this.loading = false;
         },
         error: () => {
@@ -88,5 +103,14 @@ export class LotesPageComponent implements OnInit {
           this.buscarLotes();
         }
       });
+  }
+
+  alterarPagina(event: PageEvent) {
+
+    this.page = event.pageIndex;
+
+    this.size = event.pageSize;
+
+    this.buscarLotes();
   }
 }
