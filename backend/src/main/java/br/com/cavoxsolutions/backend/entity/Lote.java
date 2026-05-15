@@ -32,7 +32,8 @@ public class Lote {
     @OneToMany(
             mappedBy = "lote",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private List<Documento> documentos;
 }

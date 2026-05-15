@@ -1,6 +1,7 @@
 package br.com.cavoxsolutions.backend.service;
 
 import br.com.cavoxsolutions.backend.dto.AtualizarStatusDTO;
+import br.com.cavoxsolutions.backend.dto.LoteListResponseDTO;
 import br.com.cavoxsolutions.backend.dto.LoteRequestDTO;
 import br.com.cavoxsolutions.backend.entity.Documento;
 import br.com.cavoxsolutions.backend.entity.Lote;
@@ -48,25 +49,35 @@ public class LoteService {
         return repository.save(lote);
     }
 
-    public Page<Lote> listar(
+    public Page<LoteListResponseDTO> listar(
             StatusLote status,
             String operador,
             Pageable pageable
     ) {
+        Page<Lote> page;
 
         if (status != null && operador != null) {
-            return repository.findByStatusAndOperador(status, operador, pageable);
+            page = repository.findByStatusAndOperador(status, operador, pageable);
+        } else if(status != null){
+            page = repository.findByStatus(status,pageable);
+        } else if(operador != null){
+            page = repository.findByOperador(
+                    operador,
+                    pageable
+            );
+        }else{
+            page = repository.findAll(pageable);
         }
 
-        if (status != null) {
-            return repository.findByStatus(status, pageable);
-        }
 
-        if (operador != null) {
-            return repository.findByOperador(operador, pageable);
-        }
-
-        return repository.findAll(pageable);
+        return page.map(lote -> LoteListResponseDTO.builder()
+                .id(lote.getId())
+                .operador(lote.getOperador())
+                .processo(lote.getProcesso())
+                .status(lote.getStatus())
+                .dataCriacao(lote.getDataCriacao())
+                .build()
+        );
     }
 
     public Lote atualizarStatus(Long id, AtualizarStatusDTO dto) {
